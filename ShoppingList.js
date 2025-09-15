@@ -1,10 +1,4 @@
-const shoppingList = [  //Array creado
-{
-    item: "",
-    cantidad: 0,
-    comprado: false
-}
-];
+
 
 const shoppingList = [];  //funcion toma parametros (item, quantity)
 function addItem(item, quantity) {  
@@ -22,7 +16,7 @@ function removeItem(index) {  //elimina un objeto Array segun index
     } else {
         console.table("Indice fuera de rango.");
     }
-};
+}
 
 function updateItem(index, newItem, newQuantity) { //modifica la  cantidad de un elemento
 if (index >= 0 && index < shoppingList.length) { //si index correcto actualiza item y cantidad
@@ -32,3 +26,14 @@ if (index >= 0 && index < shoppingList.length) { //si index correcto actualiza i
     console.table("Indice fuera de rango");
 }
 }
+
+function showList () {
+    console.table(shoppingList);
+}
+
+
+addItem("comida Yaky", 1);
+addItem("comida lucifer", 1);
+addItem("toallitas", 3);
+addItem("agua", 2);
+showList();
