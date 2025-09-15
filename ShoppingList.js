@@ -14,3 +14,10 @@ function addItem(item, quantity) {
     };
     shoppingList.push(newItem);
 }
+function removeItem(index) {
+    if (index >= 0 && index < shoppingList.length) {
+        shoppingList.splice(index, 1);
+    } else {
+        console.log("Indice fuera de rango.");
+    }
+};
