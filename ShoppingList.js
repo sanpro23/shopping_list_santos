@@ -5,8 +5,12 @@ let shoppingList = [
     comprado: false
 }
 ];
-function addItem(item, quantiy) {
-    item: "pan",
-    cantidad: 2,
-    comprado: true
+let shoppingList = [];
+function addItem(item, quantity) {
+    let newItem = {
+        item: item,
+        cantidad: quantity,
+        comprado: false
+    };
+    shoppingList.push(newItem);
 }
