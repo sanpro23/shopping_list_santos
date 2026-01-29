@@ -1,39 +1,106 @@
+const shoppingList = [];
 
-
-const shoppingList = [];  //funcion toma parametros (item, quantity)
-function addItem(item, quantity) {  
-    const newItem = {   // Estructura del objeto
+// Función para agregar item
+function addItem(item, quantity) {
+    if (!item || item.trim() === '') {
+        alert('Por favor ingresa un nombre de artículo');
+        return;
+    }
+    
+    const newItem = {
         item: item,
-        cantidad: quantity,
+        cantidad: parseInt(quantity) || 1,
         comprado: false
     };
-    shoppingList.push(newItem); //Añade objeto al array con push.()
+    shoppingList.push(newItem);
+    renderList();
+    clearInputs();
 }
 
-function removeItem(index) {  //elimina un objeto Array segun index
-    if (index >= 0 && index < shoppingList.length) { // verifica index dentro rango 
-        shoppingList.splice(index, 1); // eliminar objeto en esa posicion
-    } else {
-        console.table("Indice fuera de rango.");
+// Función para eliminar item
+function removeItem(index) {
+    if (index >= 0 && index < shoppingList.length) {
+        shoppingList.splice(index, 1);
+        renderList();
     }
 }
 
-function updateItem(index, newItem, newQuantity) { //modifica la  cantidad de un elemento
-if (index >= 0 && index < shoppingList.length) { //si index correcto actualiza item y cantidad
-    shoppingList[index].item = newItem; 
-    shoppingList[index].cantidad = newQuantity;
-} else {
-    console.table("Indice fuera de rango");
-}
-}
-
-function showList () {
-    console.table(shoppingList);
+// Función para actualizar item
+function updateItem(index, newItem, newQuantity) {
+    if (index >= 0 && index < shoppingList.length) {
+        shoppingList[index].item = newItem;
+        shoppingList[index].cantidad = newQuantity;
+        renderList();
+    }
 }
 
+// Función para marcar/desmarcar como comprado
+function toggleComprado(index) {
+    if (index >= 0 && index < shoppingList.length) {
+        shoppingList[index].comprado = !shoppingList[index].comprado;
+        renderList();
+    }
+}
 
-addItem("comida Yaky", 1);
-addItem("comida lucifer", 1);
-addItem("toallitas", 3);
-addItem("agua", 2);
-showList();
+// Función para renderizar la lista en el DOM
+function renderList() {
+    const container = document.getElementById('shoppingListContainer');
+    container.innerHTML = '';
+    
+    if (shoppingList.length === 0) {
+        container.innerHTML = '<li class="empty">No hay artículos en la lista</li>';
+        return;
+    }
+    
+    shoppingList.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.className = item.comprado ? 'comprado' : '';
+        
+        li.innerHTML = `
+            <input type="checkbox" 
+                   ${item.comprado ? 'checked' : ''} 
+                   onchange="toggleComprado(${index})">
+            <span class="item-name">${item.item}</span>
+            <span class="item-quantity">x${item.cantidad}</span>
+            <button class="delete-btn" onclick="removeItem(${index})">🗑️</button>
+        `;
+        
+        container.appendChild(li);
+    });
+}
+
+// Función para limpiar inputs
+function clearInputs() {
+    document.getElementById('itemInput').value = '';
+    document.getElementById('quantityInput').value = '1';
+    document.getElementById('itemInput').focus();
+}
+
+// Event Listeners cuando carga el DOM
+document.addEventListener('DOMContentLoaded', () => {
+    const addButton = document.getElementById('addButton');
+    const itemInput = document.getElementById('itemInput');
+    const quantityInput = document.getElementById('quantityInput');
+    
+    // Agregar al hacer click en el botón
+    addButton.addEventListener('click', () => {
+        addItem(itemInput.value, quantityInput.value);
+    });
+    
+    // Agregar al presionar Enter en el input de nombre
+    itemInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            addItem(itemInput.value, quantityInput.value);
+        }
+    });
+    
+    // Agregar al presionar Enter en el input de cantidad
+    quantityInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            addItem(itemInput.value, quantityInput.value);
+        }
+    });
+    
+    // Renderizar lista inicial (vacía)
+    renderList();
+});
